@@ -1,0 +1,17 @@
+$card-width: 500px;
+
+.home {
+    &-container {
+      .home-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+  
+        .p-card {
+          width: $card-width;
+        }
+      }
+    }
+  }
