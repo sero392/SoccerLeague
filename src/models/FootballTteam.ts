@@ -6,7 +6,7 @@ export class FootballTeam {
   lossRate: number;
   goalsScored: number;
   goalsConceded: number;
-
+  weeklyGoalsScored : number;
   constructor(name: string = "") {
     this.name = name;
     this.points = 0;
@@ -15,6 +15,7 @@ export class FootballTeam {
     this.lossRate = 0;
     this.goalsScored = 0;
     this.goalsConceded = 0;
+    this.weeklyGoalsScored = 0;
   }
 
   // Averaj hesaplama fonksiyonu

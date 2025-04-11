@@ -1,13 +1,12 @@
 <div class="home-container">
   <div class="home-content">
-    <!-- <p-card>
+    <p-card>
         <ng-template #header>
             <h2 >Puan Durumu</h2>
         </ng-template>
-      <p-table [value]="teams">
+      <p-table [value]="matchResultsArray" [paginator]="true" [rows]="10" [showCurrentPageReport]="true">
         <ng-template #header>
             <tr>
-                <th>Id</th>
                 <th>Takım Adı</th>
                 <th>P</th>
                 <th>G</th>
@@ -16,32 +15,55 @@
                 <th>A</th>
             </tr>
         </ng-template>
-        <ng-template #body let-team>
+        <ng-template #body let-result>
             <tr>
-                <td>{{ team.TeamId }}</td>
-                <td>{{ team.TeamName }}</td>
-                <td>{{ team.Points }}</td>
-                <td>{{ team.Wins }}</td>
-                <td>{{ team.Draws }}</td>
-                <td>{{ team.Losses }}</td>
-                <td>{{ team.Avarage }}</td>
+                <td>{{ result.team.name }}</td>
+                <td>{{ result.team.points }}</td>
+                <td>{{ result.team.winRate }}</td>
+                <td>{{ result.team.drawRate }}</td>
+                <td>{{ result.team.lossRate }}</td>
+                <td>{{ result.team.goalsScored -  result.team.goalsConceded}}</td>
             </tr>
         </ng-template>
       </p-table>
 
       <ng-template #footer>
         <div class="flex gap-4 mt-1">
-            <p-button label="Next Week" class="w-full"  />
+            <p-button (click)="startSimulate()" label="Next Week" class="w-full"  />
         </div>
     </ng-template>
     </p-card>
-     -->
+    
+    <p-card>
+      <ng-template #header>
+          <h2 >Haftanın Karşılaşmaları</h2>
+      </ng-template>
+    <p-table [value]="fixtureList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true">
+      <ng-template #header>
+          <tr>
+              <th>Takım Adı</th>
+              <th>Skor</th>
+              <th>Rakip Takım Adı</th>
+          </tr>
+      </ng-template>
+      <ng-template #body let-result>
+          <tr>
+              <td>{{ result[0].name }}</td>
+              <td>{{ `${result[0].weeklyGoalsScored} - ${result[1].weeklyGoalsScored}` }}</td>
+              <td>{{ result[1].name  }}</td>
+
+          </tr>
+      </ng-template>
+    </p-table>
+
+    <ng-template #footer>
+      <div class="flex gap-4 mt-1">
+          <p-button (click)="startSimulate()" label="Next Week" class="w-full"  />
+      </div>
+  </ng-template>
+  </p-card>
 
 
 
-  <!-- Haftalar -->
-  <div class="week-results">
-    <button (click)="startSimulate()">Simulate League for {{ weeks }} Weeks</button>
-  </div>
   </div>
 </div>
