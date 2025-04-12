@@ -1,14 +1,37 @@
 import { FootballTeam } from '../models/FootballTteam';
 
-
 export class MatchSimulationService {
   private teams: FootballTeam[] = []; // Takımlar
   private matchResults = new Map<string, FootballTeam>(); // Maç sonuçlarını tutacak array
   private fixtureList: FootballTeam[][] = [];
 
+  public isCompleteLeague = false; // Ligin tamamlanıp tamamlanmadığını kontrol etmek için değişken
 
-  setTeams(teams: FootballTeam[]): void {
+
+  //#region Private Metods
+
+
+  // Rastgele gol sayısı üretme fonksiyonu
+  private getRandomGoals(): number {
+    return Math.floor(Math.random() * 10) + 1; // bir futbol karşılaşmasında şimdiye kadar en fazla 31 gol atılmıştır.
+  }
+
+
+
+  //#endregion
+
+
+
+
+//#region Public Methods
+  public setTeams(teams: FootballTeam[]): void {
     this.teams = teams;
+  }
+
+  public setEmptyResults(): void {
+    this.matchResults.clear(); // Maç sonuçlarını temizle
+    this.fixtureList = []; // Fixture listesini temizle
+    this.isCompleteLeague = false; // Ligi tamamla bayrağını sıfırla
   }
 
   public getMatchResults(): Map<string, FootballTeam> {
@@ -20,15 +43,40 @@ export class MatchSimulationService {
     return this.fixtureList; // Fixture listesini döndür
   }
 
-
   //Ligi simule eder
-  public simulateLeague(weeks: number, startedWeek: number, expectedWeek: number): void {
+  public simulateLeague(
+    weeks: number,
+    startedWeek: number,
+    expectedWeek: number
+  ): void {
+    if (this.isCompleteLeague) {
+      alert('Ligi tamamladınız!'); // Ligi tamamladığınızda uyarı ver
+      return;
+    }
+
     const fixtures = this.generateLeagueFixtures(this.teams, weeks);
+    // En yüksek puanlı takımı bul
+    const maxPoints = Math.max(
+      ...Array.from(this.matchResults.values()).map((team) => team.points)
+    );
+
+    // Kalan hafta sayısını hesapla
+    const remainingWeeks = weeks - expectedWeek;
+
+    // Her takım için farkı kontrol et
+    this.matchResults.forEach((team) => {
+      const pointDifference = maxPoints - team.points;
+
+      // Kalan haftalarda kapatılamıyorsa, arka planı kırmızı yap
+      if (pointDifference > remainingWeeks * 3) {
+        team.background = 'red'; // Takımın arka planını kırmızı yap
+      } else {
+        team.background = 'none'; // Arka planı sıfırla
+      }
+    });
 
     for (let index = startedWeek; index < expectedWeek; index++) {
       fixtures[index].forEach((match) => {
-        // let teamA = Object.assign(new FootballTeam(''), match[0]);
-        // let teamB = Object.assign(new FootballTeam(''), match[1]);
         let teamA = match[0];
         let teamB = match[1];
 
@@ -51,7 +99,6 @@ export class MatchSimulationService {
         teamA.drawRate += pointsA === pointsB ? 1 : 0;
         teamA.lossRate += pointsA < pointsB ? 1 : 0;
 
-
         teamB.winRate += pointsB > pointsA ? 1 : 0;
         teamB.drawRate += pointsB === pointsA ? 1 : 0;
         teamB.lossRate += pointsB < pointsA ? 1 : 0;
@@ -64,17 +111,27 @@ export class MatchSimulationService {
         this.matchResults.set(teamA.name, teamA);
         this.matchResults.set(teamB.name, teamB);
       });
+    }
 
+    if (weeks <= expectedWeek) {
+      const champion = Array.from(this.matchResults.values()).reduce(
+        (team1, team2) => {
+          if (team1.points === team2.points)
+            return team1.goalDifference > team2.goalDifference ? team1 : team2; // Eğer puanlar eşitse, averaja göre karşılaştır
+          return team1.points > team2.points ? team1 : team2;
+        }
+      );
+
+      alert(`Şampiyon: ${champion.name} - Puan: ${champion.points}`);
+      this.isCompleteLeague = true; // Ligi tamamla
     }
   }
 
-  // Rastgele gol sayısı üretme fonksiyonu
-  private getRandomGoals(): number {
-    return Math.floor(Math.random() * 5) + 1; // 1-5 arasında gol
-  }
-
   // Fikstür oluşturma fonksiyonu (Round Robin Formatında)
-  public generateLeagueFixtures(teams: FootballTeam[], totalWeeks: number): FootballTeam[][][] {
+  public generateLeagueFixtures(
+    teams: FootballTeam[],
+    totalWeeks: number
+  ): FootballTeam[][][] {
     ///Round Robin formatında maç takvimi oluşturma///
 
     if (teams.length % 2 !== 0) {
@@ -102,20 +159,20 @@ export class MatchSimulationService {
       for (let i = 1; i < numMatchesPerRound; i++) {
         //2.round'da sabit olmayan diğer iki takım bulunuyor.
         const home = rotatingTeams[(round + i) % rotatingTeams.length];
-        const away = rotatingTeams[(round + rotatingTeams.length - i) % rotatingTeams.length];
+        const away =
+          rotatingTeams[
+            (round + rotatingTeams.length - i) % rotatingTeams.length
+          ];
         matches.push([home, away]);
-
       }
 
       rounds.push(matches);
     }
 
-
     // 2. yarı karşılaşmalarını oluşturuyoruz
-    const reverseRounds = rounds.map(round =>
+    const reverseRounds = rounds.map((round) =>
       round.map(([home, away]) => [away, home])
     );
-
 
     //Tüm karşılaşmaları birleştiriyoruz
     const fullSchedule = [...rounds, ...reverseRounds];
@@ -123,6 +180,4 @@ export class MatchSimulationService {
     // Toplam hafta sayısına göre kesiyoruz
     return fullSchedule.slice(0, totalWeeks);
   }
-
-
 }

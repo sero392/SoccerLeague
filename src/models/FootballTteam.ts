@@ -1,21 +1,17 @@
 export class FootballTeam {
+  
   name: string;
-  points: number;
-  winRate: number;
-  drawRate: number;
-  lossRate: number;
-  goalsScored: number;
-  goalsConceded: number;
-  weeklyGoalsScored : number;
+  points: number = 0;
+  winRate: number = 0;
+  drawRate: number = 0;
+  lossRate: number = 0;
+  goalsScored: number = 0;
+  goalsConceded: number = 0;
+  weeklyGoalsScored : number = 0;
+  background: string = "none"; // Arka plan rengi için değişken
+
   constructor(name: string = "") {
     this.name = name;
-    this.points = 0;
-    this.winRate = 0;
-    this.drawRate = 0;
-    this.lossRate = 0;
-    this.goalsScored = 0;
-    this.goalsConceded = 0;
-    this.weeklyGoalsScored = 0;
   }
 
   // Averaj hesaplama fonksiyonu

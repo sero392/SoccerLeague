@@ -1,69 +1,93 @@
 <div class="home-container">
-  <div class="home-content">
+  <div class="home-buttons-card">
     <p-card>
-        <ng-template #header>
-            <h2 >Puan Durumu</h2>
-        </ng-template>
-      <p-table [value]="matchResultsArray" [paginator]="true" [rows]="10" [showCurrentPageReport]="true">
-        <ng-template #header>
-            <tr>
-                <th>Takım Adı</th>
-                <th>P</th>
-                <th>G</th>
-                <th>B</th>
-                <th>M</th>
-                <th>A</th>
-            </tr>
-        </ng-template>
-        <ng-template #body let-result>
-            <tr>
-                <td>{{ result.team.name }}</td>
-                <td>{{ result.team.points }}</td>
-                <td>{{ result.team.winRate }}</td>
-                <td>{{ result.team.drawRate }}</td>
-                <td>{{ result.team.lossRate }}</td>
-                <td>{{ result.team.goalsScored -  result.team.goalsConceded}}</td>
-            </tr>
-        </ng-template>
-      </p-table>
+      <ng-template #header>
+          <h2 class="text-center">
+            Lig Simülasyonu
+          </h2>
+      </ng-template>
+      <p-button
+        [disabled]="isCompeteLeague"
+        (click)="startSimulate()"
+        [label]="
+          matchResultsArray.length > 0 ? 'Sonraki Hafta' : 'Simülasyonu Başlat'
+        "
+        severity="info"
+      >
+        <i class="pi pi-play"></i>
+      </p-button>
 
-      <ng-template #footer>
-        <div class="flex gap-4 mt-1">
-            <p-button (click)="startSimulate()" label="Next Week" class="w-full"  />
-        </div>
-    </ng-template>
+      <p-button
+        [disabled]="isCompeteLeague"
+        (click)="playAllLeague()"
+        label="Tüm Ligi Oynat"
+        severity="success"
+      >
+        <i class="pi pi-play-circle"></i>
+      </p-button>
+
+
     </p-card>
-    
+  </div>
+  <div *ngIf="matchResultsArray.length > 0" class="home-content pt-3">
     <p-card>
       <ng-template #header>
-          <h2 >Haftanın Karşılaşmaları</h2>
+        <h2>Puan Durumu</h2>
       </ng-template>
-    <p-table [value]="fixtureList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true">
-      <ng-template #header>
-          <tr>
+
+      <div>
+        <p-table
+          [value]="matchResultsArray"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+        >
+          <ng-template #header>
+            <tr>
               <th>Takım Adı</th>
-              <th>Skor</th>
-              <th>Rakip Takım Adı</th>
-          </tr>
-      </ng-template>
-      <ng-template #body let-result>
-          <tr>
-              <td>{{ result[0].name }}</td>
-              <td>{{ `${result[0].weeklyGoalsScored} - ${result[1].weeklyGoalsScored}` }}</td>
-              <td>{{ result[1].name  }}</td>
-
-          </tr>
-      </ng-template>
-    </p-table>
-
-    <ng-template #footer>
-      <div class="flex gap-4 mt-1">
-          <p-button (click)="startSimulate()" label="Next Week" class="w-full"  />
+              <th>P</th>
+              <th>G</th>
+              <th>B</th>
+              <th>M</th>
+              <th>A</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-result>
+            <tr
+              [ngClass]="{ 'red-background': result.team.background === 'red' }"
+            >
+              <td>{{ result.team.name }}</td>
+              <td>{{ result.team.points }}</td>
+              <td>{{ result.team.winRate }}</td>
+              <td>{{ result.team.drawRate }}</td>
+              <td>{{ result.team.lossRate }}</td>
+              <td>{{ result.team.goalDifference }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
-  </ng-template>
-  </p-card>
+    </p-card>
 
-
-
+    <p-card>
+      <ng-template #header>
+        <h2>Haftanın Karşılaşmaları</h2>
+      </ng-template>
+      <div class="matchups-weekly">
+        <div
+          *ngFor="let fixture of fixtureList"
+          class="matchups-weekly-content"
+        >
+          <div class="matchups-left-side">
+            <span>{{ fixture[0].name }}</span>
+          </div>
+          <div class="matcups-score">
+            {{ `${fixture[0].weeklyGoalsScored} - ${fixture[1].weeklyGoalsScored}` }}
+          </div>
+          <div class="matchups-right-side">
+            {{ fixture[1].name }}
+          </div>
+        </div>
+      </div>
+    </p-card>
   </div>
 </div>
