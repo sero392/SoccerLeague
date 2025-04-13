@@ -1,8 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
 
+:root{
+  font-family: sans-serif;
+}
 .red-background{
-    background-color: #F7374F !important;
+    background-color: #BE3144 !important;
     color: white !important;
   }
 

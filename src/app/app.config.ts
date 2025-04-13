@@ -6,7 +6,7 @@ import { providePrimeNG } from 'primeng/config';
 
 import Aura from '@primeng/themes/aura';
 import { MatchSimulationService } from '../services/match-simulation.service';
-import { FootballTeam } from '../models/FootballTteam';
+import { FootballTeam } from '../models/FootballTeam';
 
 export const appConfig: ApplicationConfig = {
   providers: [

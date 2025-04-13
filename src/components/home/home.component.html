@@ -1,93 +1,34 @@
 <div class="home-container">
-  <div class="home-buttons-card">
-    <p-card>
-      <ng-template #header>
-          <h2 class="text-center">
-            Lig Simülasyonu
-          </h2>
-      </ng-template>
-      <p-button
-        [disabled]="isCompeteLeague"
-        (click)="startSimulate()"
-        [label]="
-          matchResultsArray.length > 0 ? 'Sonraki Hafta' : 'Simülasyonu Başlat'
-        "
-        severity="info"
-      >
-        <i class="pi pi-play"></i>
-      </p-button>
+    <div class="home-buttons-card">
+        <p-card>
+            <ng-template #header>
+                <h2 class="text-center">
+                    Lig Simülasyonu
+                </h2>
+            </ng-template>
+            <div class="play-buttons">
+                <p-button [disabled]="isCompeteLeague" (click)="startSimulate()" [label]="
+    matchResults.size > 0 ? 'Sonraki Hafta' : 'Simülasyonu Başlat'
+  " severity="info">
+                    <i class="pi pi-play"></i>
+                </p-button>
 
-      <p-button
-        [disabled]="isCompeteLeague"
-        (click)="playAllLeague()"
-        label="Tüm Ligi Oynat"
-        severity="success"
-      >
-        <i class="pi pi-play-circle"></i>
-      </p-button>
+                <p-button [disabled]="isCompeteLeague || isStartedLeague" (click)="playAllLeague()" label="Tüm Ligi Oynat"
+                    severity="success">
+                    <i class="pi pi-play-circle"></i>
+                </p-button>
+
+                <p-button  (click)="refreshPage()" label="Sayfayı yenile"
+                severity="danger">
+                <i class="pi pi-refresh"></i>
+            </p-button>
+            </div>
 
 
-    </p-card>
-  </div>
-  <div *ngIf="matchResultsArray.length > 0" class="home-content pt-3">
-    <p-card>
-      <ng-template #header>
-        <h2>Puan Durumu</h2>
-      </ng-template>
-
-      <div>
-        <p-table
-          [value]="matchResultsArray"
-          [paginator]="true"
-          [rows]="10"
-          [showCurrentPageReport]="true"
-        >
-          <ng-template #header>
-            <tr>
-              <th>Takım Adı</th>
-              <th>P</th>
-              <th>G</th>
-              <th>B</th>
-              <th>M</th>
-              <th>A</th>
-            </tr>
-          </ng-template>
-          <ng-template #body let-result>
-            <tr
-              [ngClass]="{ 'red-background': result.team.background === 'red' }"
-            >
-              <td>{{ result.team.name }}</td>
-              <td>{{ result.team.points }}</td>
-              <td>{{ result.team.winRate }}</td>
-              <td>{{ result.team.drawRate }}</td>
-              <td>{{ result.team.lossRate }}</td>
-              <td>{{ result.team.goalDifference }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </p-card>
-
-    <p-card>
-      <ng-template #header>
-        <h2>Haftanın Karşılaşmaları</h2>
-      </ng-template>
-      <div class="matchups-weekly">
-        <div
-          *ngFor="let fixture of fixtureList"
-          class="matchups-weekly-content"
-        >
-          <div class="matchups-left-side">
-            <span>{{ fixture[0].name }}</span>
-          </div>
-          <div class="matcups-score">
-            {{ `${fixture[0].weeklyGoalsScored} - ${fixture[1].weeklyGoalsScored}` }}
-          </div>
-          <div class="matchups-right-side">
-            {{ fixture[1].name }}
-          </div>
-        </div>
-      </div>
-    </p-card>
-  </div>
+        </p-card>
+    </div>
+    <div *ngIf="matchResults.size  > 0" class="home-content pt-3">
+        <app-point-stat-comp></app-point-stat-comp>
+        <app-weekly-matchup-comp></app-weekly-matchup-comp>
+    </div>
 </div>

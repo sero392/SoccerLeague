@@ -1,0 +1,39 @@
+    <p-card>
+            <ng-template #header>
+                <h2>Puan Durumu</h2>
+            </ng-template>
+
+            <div>
+                <p-table [value]="matchResultsArray">
+                    <ng-template #header>
+                        <tr>
+                            <th>Takım Adı</th>
+                            <th>P</th>
+                            <th>G</th>
+                            <th>B</th>
+                            <th>M</th>
+                            <th>A</th>
+                            <th>Şampiyonluk(%)</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-result>
+                        <tr [ngClass]="{ 'red-background': result.team.background === 'red' }">
+                            <td class="team-icon-container">
+                                <div class="team-name">
+                                    {{ result.team.name }}
+                                </div>
+                                <div class="team-icon">
+                                    <img width="25" [src]='result.team.icon' />
+                                </div>
+                            </td>
+                            <td>{{ result.team.points }}</td>
+                            <td>{{ result.team.winRate }}</td>
+                            <td>{{ result.team.drawRate }}</td>
+                            <td>{{ result.team.lossRate }}</td>
+                            <td>{{ result.team.goalDifference }}</td>
+                            <td>{{ result.team.championsRate }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </p-card>
