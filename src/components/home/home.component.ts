@@ -27,10 +27,10 @@ export class HomeComponent {
 
   //#region Properties
   teams: FootballTeam[] = [
-    new FootballTeam('Fenerbahçe', '/fb.png',5),
-    new FootballTeam('Galatasaray', '/gs.png',5),
-    new FootballTeam('Beşiktaş', '/bjk.png',4),
-    new FootballTeam('Bursaspor', '/bs.png',3),
+    new FootballTeam('Fenerbahçe', '/fb.png',[5,5]),
+    new FootballTeam('Galatasaray', '/gs.png',[5,5]),
+    new FootballTeam('Beşiktaş', '/bjk.png',[5,4]),
+    new FootballTeam('Bursaspor', '/bs.png',[3,2]),
   ];
 
   weeks: number = 6; // Toplam hafta sayısı

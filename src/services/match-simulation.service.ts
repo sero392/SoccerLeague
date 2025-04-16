@@ -9,16 +9,18 @@ export class MatchSimulationService {
   public isCompleteLeague = false; // Ligin tamamlanıp tamamlanmadığını kontrol etmek için değişken
 
   //#region Sabitler
-  private readonly MAX_GOALS = 5; // Maksimum gol sayısı (takımın gücüne göre değişkenlik gösteriyor.)
   private readonly WIN_POINTS = 3; // Galibiyet puanı
   private readonly DRAW_POINTS = 1; // Beraberlik puanı
+  private readonly GOALS_ARRAY = [1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5];
   //#endregion
 
   //#region Private Metotlar
 
   // Rastgele gol sayısı üretme fonksiyonu
   private getRandomGoals(team: FootballTeam = new FootballTeam()): number {
-    return Math.floor(Math.random() * this.MAX_GOALS) + team.teamPower;
+    // return Math.floor(Math.random() * this.MAX_GOALS) + team.teamPower;
+    const calulatedGoals = [...this.GOALS_ARRAY,...team.teamPower]
+    return calulatedGoals[Math.floor(Math.random() * calulatedGoals.length)]
   }
 
   // Haftalık maçları simüle eder
@@ -105,8 +107,10 @@ export class MatchSimulationService {
     Swal.fire({
       title: 'Şampiyon!',
       text: `${champion.name} - Puan: ${champion.points} - Avaraj: ${champion.goalDifference}`,
-      icon: 'success',
-      confirmButtonText: 'Tamam',
+      imageUrl:'/champions.gif',
+      imageWidth:200,
+      imageHeight:150,
+      showConfirmButton:false
     });
     this.isCompleteLeague = true;
   }
